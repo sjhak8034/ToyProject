@@ -1,18 +1,31 @@
 spring:
   application:
     name: ToyProject
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: none  # ?? create, create-drop, validate, none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect  # MySQL 8? ??
   security:
     oauth2:
       client:
         registration:
           google:
-            client-id: your-app-client-id
-            client-secret: your-app-client-secret
-        provider:
-          okta:
-            authorization-uri: https://your-subdomain.oktapreview.com/oauth2/v1/authorize
-            token-uri: https://your-subdomain.oktapreview.com/oauth2/v1/token
-            user-info-uri: https://your-subdomain.oktapreview.com/oauth2/v1/userinfo
-            jwk-set-uri: https://your-subdomain.oktapreview.com/oauth2/v1/keys
+            client-id: ${OAUTH2.0_GOOGLE_CLIENT_ID}
+            client-secret: ${OAUTH2.0_GOOGLE_CLIENT_SECRET}
+            scope:
+              - email
+  config:
+    import: optional:file:.env[.properties]
 server:
   port: 3000
+
+

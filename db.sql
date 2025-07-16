@@ -362,10 +362,13 @@ CREATE TABLE `users` (
                          `username` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
                          `nickname` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
                          `password` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-                         `role` enum('admin','free','membership') COLLATE utf8mb4_general_ci NOT NULL,
+                         `role` enum('USER','ADMIN') COLLATE utf8mb4_general_ci NOT NULL,
                          `created_at` timestamp NULL DEFAULT NULL,
                          `updated_at` timestamp NULL DEFAULT NULL,
                          `deleted_at` timestamp NULL DEFAULT NULL,
+                         'name' varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
+                         `email` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+                         `picture` TEXT COLLATE utf8mb4_general_ci DEFAULT NULL,
                          PRIMARY KEY (`id`),
                          UNIQUE KEY `users_index_0` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

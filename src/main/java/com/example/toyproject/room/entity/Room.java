@@ -24,7 +24,6 @@ public class Room extends BaseTimeEntity {
 
     private RoomType type;
 
-    @Column
     @OneToOne
     @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
