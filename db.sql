@@ -23,12 +23,12 @@ DROP TABLE IF EXISTS `admin_users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `admin_users` (
-                               `id` bigint NOT NULL,
+                               `id` bigint NOT NULL AUTO_INCREMENT,
                                `name` varchar(20) COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'admin',
                                `user_id` bigint DEFAULT NULL,
                                PRIMARY KEY (`id`),
-                               KEY `user_id` (`user_id`),
-                               CONSTRAINT `admin_users_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+                               KEY `admin_users_users_id_fk` (`user_id`),
+                               CONSTRAINT `admin_users_users_id_fk` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -49,15 +49,15 @@ DROP TABLE IF EXISTS `ai_chats`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `ai_chats` (
-                            `id` bigint NOT NULL,
+                            `id` bigint NOT NULL AUTO_INCREMENT,
                             `ai_player_id` bigint DEFAULT NULL,
                             `tokens` bigint NOT NULL DEFAULT '0',
                             `chat_id` bigint DEFAULT NULL,
                             PRIMARY KEY (`id`),
-                            KEY `ai_player_id` (`ai_player_id`),
-                            KEY `chat_id` (`chat_id`),
-                            CONSTRAINT `ai_chats_ibfk_1` FOREIGN KEY (`ai_player_id`) REFERENCES `ai_players` (`id`),
-                            CONSTRAINT `ai_chats_ibfk_2` FOREIGN KEY (`chat_id`) REFERENCES `chats` (`id`)
+                            KEY `ai_chats_ai_players_id_fk` (`ai_player_id`),
+                            KEY `ai_chats_chats_id_fk` (`chat_id`),
+                            CONSTRAINT `ai_chats_ai_players_id_fk` FOREIGN KEY (`ai_player_id`) REFERENCES `ai_players` (`id`),
+                            CONSTRAINT `ai_chats_chats_id_fk` FOREIGN KEY (`chat_id`) REFERENCES `chats` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -78,14 +78,14 @@ DROP TABLE IF EXISTS `ai_players`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `ai_players` (
-                              `id` bigint NOT NULL,
+                              `id` bigint NOT NULL AUTO_INCREMENT,
                               `player_id` bigint DEFAULT NULL,
                               `role_id` bigint DEFAULT NULL,
                               PRIMARY KEY (`id`),
-                              KEY `player_id` (`player_id`),
-                              KEY `role` (`role_id`),
-                              CONSTRAINT `ai_players_ibfk_1` FOREIGN KEY (`player_id`) REFERENCES `players` (`id`),
-                              CONSTRAINT `ai_players_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `ai_roles` (`id`)
+                              KEY `ai_players_ai_roles_id_fk` (`role_id`),
+                              KEY `ai_players_players_id_fk` (`player_id`),
+                              CONSTRAINT `ai_players_ai_roles_id_fk` FOREIGN KEY (`role_id`) REFERENCES `ai_roles` (`id`),
+                              CONSTRAINT `ai_players_players_id_fk` FOREIGN KEY (`player_id`) REFERENCES `players` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -106,7 +106,7 @@ DROP TABLE IF EXISTS `ai_roles`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `ai_roles` (
-                            `id` bigint NOT NULL,
+                            `id` bigint NOT NULL AUTO_INCREMENT,
                             `instruction` text COLLATE utf8mb4_general_ci,
                             PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -129,7 +129,7 @@ DROP TABLE IF EXISTS `chats`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `chats` (
-                         `id` bigint NOT NULL,
+                         `id` bigint NOT NULL AUTO_INCREMENT,
                          `type` enum('AI','USER') COLLATE utf8mb4_general_ci NOT NULL,
                          `room_id` bigint DEFAULT NULL,
                          `player_id` bigint DEFAULT NULL,
@@ -138,9 +138,9 @@ CREATE TABLE `chats` (
                          PRIMARY KEY (`id`),
                          KEY `chats_index_2` (`room_id`),
                          KEY `chats_index_3` (`created_at`),
-                         KEY `player_id` (`player_id`),
-                         CONSTRAINT `chats_ibfk_1` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`id`),
-                         CONSTRAINT `chats_ibfk_2` FOREIGN KEY (`player_id`) REFERENCES `players` (`id`)
+                         KEY `chats_players_id_fk` (`player_id`),
+                         CONSTRAINT `chats_players_id_fk` FOREIGN KEY (`player_id`) REFERENCES `players` (`id`),
+                         CONSTRAINT `chats_rooms_id_fk` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -161,7 +161,7 @@ DROP TABLE IF EXISTS `group_rooms`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `group_rooms` (
-                               `id` bigint NOT NULL,
+                               `id` bigint NOT NULL AUTO_INCREMENT,
                                `invite_code` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
                                `room_id` bigint DEFAULT NULL,
                                PRIMARY KEY (`id`),
@@ -188,15 +188,15 @@ DROP TABLE IF EXISTS `membership_users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `membership_users` (
-                                    `id` bigint NOT NULL,
+                                    `id` bigint NOT NULL AUTO_INCREMENT,
                                     `bankType` enum('KOOKMIN','SHINHAN','HANA','IBK','NH','WOORI','KAKAOBANK','TOSSBANK') COLLATE utf8mb4_general_ci NOT NULL,
                                     `accountNumber` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
                                     `accountHolder` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
                                     `credit` double NOT NULL DEFAULT '0',
                                     `user_id` bigint DEFAULT NULL,
                                     PRIMARY KEY (`id`),
-                                    KEY `user_id` (`user_id`),
-                                    CONSTRAINT `membership_users_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+                                    KEY `membership_users_users_id_fk` (`user_id`),
+                                    CONSTRAINT `membership_users_users_id_fk` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -217,12 +217,12 @@ DROP TABLE IF EXISTS `players`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `players` (
-                           `id` bigint NOT NULL,
+                           `id` bigint NOT NULL AUTO_INCREMENT,
                            `type` enum('AI','USER') COLLATE utf8mb4_general_ci NOT NULL,
                            `room_id` bigint DEFAULT NULL,
                            PRIMARY KEY (`id`),
-                           KEY `room_id` (`room_id`),
-                           CONSTRAINT `players_ibfk_1` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`id`)
+                           KEY `players_rooms_id_fk` (`room_id`),
+                           CONSTRAINT `players_rooms_id_fk` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -243,7 +243,7 @@ DROP TABLE IF EXISTS `rooms`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rooms` (
-                         `id` bigint NOT NULL,
+                         `id` bigint NOT NULL AUTO_INCREMENT,
                          `is_private` tinyint(1) NOT NULL,
                          `type` enum('SINGLE','GROUP') COLLATE utf8mb4_general_ci NOT NULL,
                          `owner_id` bigint DEFAULT NULL,
@@ -254,8 +254,8 @@ CREATE TABLE `rooms` (
                          `max_players` int NOT NULL,
                          PRIMARY KEY (`id`),
                          KEY `rooms_index_1` (`created_at`),
-                         KEY `owner_id` (`owner_id`),
-                         CONSTRAINT `rooms_ibfk_1` FOREIGN KEY (`owner_id`) REFERENCES `users` (`id`)
+                         KEY `rooms_users_id_fk` (`owner_id`),
+                         CONSTRAINT `rooms_users_id_fk` FOREIGN KEY (`owner_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -276,7 +276,7 @@ DROP TABLE IF EXISTS `single_rooms`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `single_rooms` (
-                                `id` bigint NOT NULL,
+                                `id` bigint NOT NULL AUTO_INCREMENT,
                                 `expected_cost` double NOT NULL,
                                 `room_id` bigint DEFAULT NULL,
                                 PRIMARY KEY (`id`),
@@ -302,14 +302,14 @@ DROP TABLE IF EXISTS `user_chats`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_chats` (
-                              `id` bigint NOT NULL,
+                              `id` bigint NOT NULL AUTO_INCREMENT,
                               `user_player_id` bigint DEFAULT NULL,
                               `chat_id` bigint DEFAULT NULL,
                               PRIMARY KEY (`id`),
-                              KEY `user_player_id` (`user_player_id`),
-                              KEY `chat_id` (`chat_id`),
-                              CONSTRAINT `user_chats_ibfk_1` FOREIGN KEY (`user_player_id`) REFERENCES `user_players` (`id`),
-                              CONSTRAINT `user_chats_ibfk_2` FOREIGN KEY (`chat_id`) REFERENCES `chats` (`id`)
+                              KEY `user_chats_user_players_id_fk` (`user_player_id`),
+                              KEY `user_chats_chats_id_fk` (`chat_id`),
+                              CONSTRAINT `user_chats_chats_id_fk` FOREIGN KEY (`chat_id`) REFERENCES `chats` (`id`),
+                              CONSTRAINT `user_chats_user_players_id_fk` FOREIGN KEY (`user_player_id`) REFERENCES `user_players` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -330,14 +330,14 @@ DROP TABLE IF EXISTS `user_players`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_players` (
-                                `id` bigint NOT NULL,
+                                `id` bigint NOT NULL AUTO_INCREMENT,
                                 `user_id` bigint DEFAULT NULL,
                                 `player_id` bigint DEFAULT NULL,
                                 PRIMARY KEY (`id`),
-                                KEY `user_id` (`user_id`),
-                                KEY `player_id` (`player_id`),
-                                CONSTRAINT `user_players_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
-                                CONSTRAINT `user_players_ibfk_2` FOREIGN KEY (`player_id`) REFERENCES `players` (`id`)
+                                KEY `user_players_users_id_fk` (`user_id`),
+                                KEY `user_players_players_id_fk` (`player_id`),
+                                CONSTRAINT `user_players_players_id_fk` FOREIGN KEY (`player_id`) REFERENCES `players` (`id`),
+                                CONSTRAINT `user_players_users_id_fk` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -358,20 +358,20 @@ DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `users` (
-                         `id` bigint NOT NULL,
+                         `id` bigint NOT NULL AUTO_INCREMENT,
                          `username` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
                          `nickname` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
-                         `password` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+                         `password` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
                          `role` enum('USER','ADMIN') COLLATE utf8mb4_general_ci NOT NULL,
                          `created_at` timestamp NULL DEFAULT NULL,
                          `updated_at` timestamp NULL DEFAULT NULL,
                          `deleted_at` timestamp NULL DEFAULT NULL,
-                         'name' varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
+                         `name` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
                          `email` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
-                         `picture` TEXT COLLATE utf8mb4_general_ci DEFAULT NULL,
+                         `picture` text COLLATE utf8mb4_general_ci,
                          PRIMARY KEY (`id`),
                          UNIQUE KEY `users_index_0` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -380,6 +380,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (1,NULL,'default1752657273',NULL,'USER','2025-07-16 09:14:34','2025-07-16 09:14:34',NULL,'default1752657273','thdwjdgkr123@gmail.com','https://lh3.googleusercontent.com/a-/ALV-UjUsTztS7yKPc8vdrn4S7mkXeTAsp4SYkbKKbH1oZP2BOcmh8g=s96-c');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -396,4 +397,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-07-15 22:33:46
+-- Dump completed on 2025-07-16 18:16:02
