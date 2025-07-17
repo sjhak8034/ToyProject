@@ -10,6 +10,9 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @DynamicInsert
 @DynamicUpdate
 @Getter
@@ -34,6 +37,8 @@ public class User extends BaseTimeEntity {
     @Lob
     private String picture;
 
+    private LocalDateTime deletedAt;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
@@ -52,5 +57,9 @@ public class User extends BaseTimeEntity {
     public void update(String name, String picture){
         this.name = name;
         this.picture = picture;
+    }
+
+    public void delete(){
+        this.deletedAt = LocalDateTime.now();
     }
 }

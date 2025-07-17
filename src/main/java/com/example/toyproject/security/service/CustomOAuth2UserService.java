@@ -10,6 +10,7 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 
@@ -22,7 +23,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         this.userRepository = userRepository;
     }
 
+    // OAuth2 로그인 시 유저 정보를 가져오는 메소드
     @Override
+    @Transactional
     public OAuth2User loadUser(OAuth2UserRequest userRequest) {
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
@@ -35,8 +38,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         OAuth2Attributes attributes = OAuth2Attributes.of(
                 registrationId, userNameAttributeName, oAuth2User.getAttributes());
 
-        // 사용자 정보 저장 또는 업데이트
-        User user = saveOrUpdate(attributes);
+        // 사용자 정보 저장
+        User user = save(attributes);
 
         // 사용자 정보와 권한을 포함한 객체 반환
         return new DefaultOAuth2User(
@@ -45,13 +48,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 attributes.getNameAttributeKey());
     }
 
-    private User saveOrUpdate(OAuth2Attributes attributes) {
+    // 첫 로그인시에만 저장 이후로 데이터가 존재하면 저장하지 않음
+    protected User save(OAuth2Attributes attributes) {
+        System.out.println("Saving or updating user with email: " + attributes.getEmail());
         User user = userRepository.findByEmail(attributes.getEmail())
-                .map(entityUser -> {
-                    // 명시적으로 update 호출 후 객체 반환
-                    entityUser.update(attributes.getName(), attributes.getPicture());
-                    return entityUser;
-                })
                 .orElse(attributes.toEntity());
 
         return userRepository.save(user);

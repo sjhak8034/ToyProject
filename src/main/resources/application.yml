@@ -25,6 +25,10 @@ spring:
               - email
   config:
     import: optional:file:.env[.properties]
+
+jwt:
+  secret: ${JWT_SECRET}  # JWT secret key
+  token-validity-in-seconds: 3600  # 1 hour
 server:
   port: 3000
 
