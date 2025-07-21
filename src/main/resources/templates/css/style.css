@@ -1,0 +1,39 @@
+.container {
+    max-width: 600px;
+    margin: 50px auto;
+    text-align: center;
+}
+
+.login-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.btn {
+    display: block;
+    padding: 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    color: white;
+}
+
+.btn-google {
+    background-color: #DB4437;
+}
+
+.btn-github {
+    background-color: #333;
+}
+
+.btn-naver {
+    background-color: #1EC800;
+}
+
+.btn-kakao {
+    background-color: #FEE500;
+    color: #000;
+}
