@@ -1,5 +1,6 @@
 package com.example.toyproject.security.util;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Component
 public class JwtTokenProvider {
 
@@ -61,10 +63,23 @@ public class JwtTokenProvider {
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token);
             return true;
-        } catch (JwtException | IllegalArgumentException e) {
-            return false;
+        } catch (io.jsonwebtoken.ExpiredJwtException e) {
+            log.error("만료된 JWT 토큰입니다: {}", e.getMessage());
+            throw e; // 예외를 다시 던져서 호출자가 처리하게 함
+        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
+            log.error("유효하지 않은 JWT 서명입니다: {}", e.getMessage());
+            throw e;
+        } catch (UnsupportedJwtException e) {
+            log.error("지원되지 않는 JWT 토큰입니다: {}", e.getMessage());
+            throw e;
+        } catch (IllegalArgumentException e) {
+            log.error("JWT 토큰이 잘못되었습니다: {}", e.getMessage());
+            throw e;
         }
     }
 
