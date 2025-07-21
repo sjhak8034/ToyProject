@@ -37,9 +37,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         // cookie.setSecure(true); // HTTPS 환경에서만 활성화
         cookie.setPath("/");
         cookie.setMaxAge(3600); // 1시간
-        System.out.println("OAuth2AuthenticationSuccessHandler: JWT 토큰 생성 완료: " + token);
         response.addCookie(cookie);
-        System.out.println("OAuth2AuthenticationSuccessHandler: JWT 토큰을 쿠키에 추가했습니다.: ");
         // 프론트엔드 리다이렉트 URL
         getRedirectStrategy().sendRedirect(request, response, frontendUrl);
     }

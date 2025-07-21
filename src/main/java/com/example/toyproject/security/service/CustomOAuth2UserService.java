@@ -50,7 +50,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     // 첫 로그인시에만 저장 이후로 데이터가 존재하면 저장하지 않음
     protected User save(OAuth2Attributes attributes) {
-        System.out.println("Saving or updating user with email: " + attributes.getEmail());
         User user = userRepository.findByEmail(attributes.getEmail())
                 .orElse(attributes.toEntity());
 

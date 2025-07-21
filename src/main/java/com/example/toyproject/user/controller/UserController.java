@@ -23,12 +23,11 @@ public class UserController {
     public ResponseEntity<UserDto.UserProfile> userProfile(
             Authentication authentication
     ) {
-        System.out.println("UserController: userProfile called with authentication: " + authentication);
 
         User user = (User) authentication.getPrincipal();
 
         return ResponseEntity.ok().body(userService.getUserProfile(user));
     }
 
-    
+
 }
