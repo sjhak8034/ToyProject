@@ -236,6 +236,33 @@ LOCK TABLES `players` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `refresh_tokens`
+--
+
+DROP TABLE IF EXISTS `refresh_tokens`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `refresh_tokens` (
+                                  `id` bigint NOT NULL AUTO_INCREMENT,
+                                  `email` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+                                  `token` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+                                  PRIMARY KEY (`id`),
+                                  KEY `email` (`email`),
+                                  KEY `refresh_tokens_token_index` (`token`)
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `refresh_tokens`
+--
+
+LOCK TABLES `refresh_tokens` WRITE;
+/*!40000 ALTER TABLE `refresh_tokens` DISABLE KEYS */;
+INSERT INTO `refresh_tokens` VALUES (17,'thdwjdgkr123@gmail.com','eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0aGR3amRna3IxMjNAZ21haWwuY29tIiwiaWF0IjoxNzUzMTg5NTc1LCJleHAiOjE3NTM3OTQzNzV9.c95eeUtPRDd_uiZN_jh0WcS3Cee-xhwuIiJ-Ah8ubTSC0Dzml7sFCo1DNKBdy1fFWPYvQexFTwfUm6DQWzuDlQ');
+/*!40000 ALTER TABLE `refresh_tokens` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `rooms`
 --
 
@@ -380,7 +407,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,NULL,'default1752657273',NULL,'USER','2025-07-16 09:14:34','2025-07-16 09:14:34',NULL,'default1752657273','thdwjdgkr123@gmail.com','https://lh3.googleusercontent.com/a-/ALV-UjUsTztS7yKPc8vdrn4S7mkXeTAsp4SYkbKKbH1oZP2BOcmh8g=s96-c');
+INSERT INTO `users` VALUES (1,NULL,'default1752657273',NULL,'USER','2025-07-16 09:14:34','2025-07-17 06:04:22',NULL,'default1752657273','thdwjdgkr123@gmail.com','https://lh3.googleusercontent.com/a-/ALV-UjUsTztS7yKPc8vdrn4S7mkXeTAsp4SYkbKKbH1oZP2BOcmh8g=s96-c');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -397,4 +424,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-07-16 18:16:02
+-- Dump completed on 2025-07-22 22:29:24
