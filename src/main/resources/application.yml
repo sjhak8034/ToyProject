@@ -29,7 +29,8 @@ spring:
 
 
 jwt:
-  secret: ${JWT_SECRET}  # JWT secret key
+  access-secret: ${ACCESS_JWT_SECRET}  # JWT secret key for access token
+  refresh-secret: ${REFRESH_JWT_SECRET}  # JWT secret key for refresh token
   token-validity-in-seconds: 3600  # 1 hour
 server:
   port: 3000

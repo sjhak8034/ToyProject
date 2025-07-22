@@ -10,7 +10,6 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 @Component
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
@@ -29,15 +28,24 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException {
 
-        String token = tokenProvider.createToken(authentication);
+        String accessToken = tokenProvider.createAccessTokenFromOauth2(authentication);
+        String refreshToken = tokenProvider.createRefreshTokenFromOauth2(authentication);
 
         // JWT를 httponly 쿠키에 저장 (공백 추가)
-        Cookie cookie = new Cookie("access_token", token);
-        cookie.setHttpOnly(true);
+        Cookie accessTokenCookie = new Cookie("access_token", accessToken);
+        Cookie refreshTokenCookie = new Cookie("refresh_token", refreshToken);
+
+        accessTokenCookie.setHttpOnly(true);
         // cookie.setSecure(true); // HTTPS 환경에서만 활성화
-        cookie.setPath("/");
-        cookie.setMaxAge(3600); // 1시간
-        response.addCookie(cookie);
+        accessTokenCookie.setPath("/");
+        accessTokenCookie.setMaxAge(3600); // 1시간
+
+        refreshTokenCookie.setHttpOnly(true);
+        refreshTokenCookie.setPath("/");
+        refreshTokenCookie.setMaxAge(604800); // 7일
+
+        response.addCookie(accessTokenCookie);
+        response.addCookie(refreshTokenCookie);
         // 프론트엔드 리다이렉트 URL
         getRedirectStrategy().sendRedirect(request, response, frontendUrl);
     }

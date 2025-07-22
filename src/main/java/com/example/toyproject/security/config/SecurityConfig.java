@@ -50,7 +50,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         // OPTIONS 요청은 인증 없이 허용
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/", "/auth/**", "/css/**", "/images/**", "/js/**", "/error", "/login").permitAll()
+                        .requestMatchers("/", "/auth/**", "/css/**", "/images/**", "/js/**", "/error", "/login",
+                                "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exceptionHandling -> exceptionHandling
@@ -74,12 +75,19 @@ public class SecurityConfig {
                 )
                 .logout(logout -> logout
                         .logoutSuccessHandler((request, response, authentication) -> {
-                            response.setStatus(HttpStatus.OK.value());  // 원하는 상태 코드
-                            response.getWriter().write("로그아웃 성공");
+                            // 응답 헤더에 UTF-8 인코딩과 콘텐츠 타입 지정
+                            response.setContentType("application/json;charset=UTF-8");
+                            response.setStatus(HttpStatus.OK.value());
+
+                            // CORS 헤더 추가
+                            response.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
+                            response.setHeader("Access-Control-Allow-Credentials", "true");
+
+                            response.getWriter().write("{\"message\":\"로그아웃 성공\"}");
                             response.getWriter().flush();
                         })
                         .invalidateHttpSession(true)
-                        .deleteCookies("access_token", "refresh_token") // JWT 토큰을 쿠키에서 삭제
+                        .deleteCookies("access_token", "refresh_token")
                         .clearAuthentication(true)
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

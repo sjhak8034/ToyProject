@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import java.time.LocalDateTime;
+import java.util.Collection;
 
 @DynamicInsert
 @DynamicUpdate
@@ -60,4 +61,5 @@ public class User extends BaseTimeEntity {
     public void delete(){
         this.deletedAt = LocalDateTime.now();
     }
+
 }
