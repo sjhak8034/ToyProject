@@ -20,14 +20,18 @@ public class Room extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String name;
+
     private boolean is_private;
 
+    @Enumerated(EnumType.STRING)
     private RoomType type;
 
     @OneToOne
     @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private RoomStatus status;
 
@@ -36,8 +40,9 @@ public class Room extends BaseTimeEntity {
 
     private LocalDateTime deletedAt;
 
-    public Room(boolean is_private, RoomType type, User owner, RoomStatus status, Integer maxPlayers) {
+    public Room(boolean is_private, String name, RoomType type, User owner, RoomStatus status, Integer maxPlayers) {
         this.is_private = is_private;
+        this.name = name;
         this.type = type;
         this.owner = owner;
         this.status = status;

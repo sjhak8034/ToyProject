@@ -19,10 +19,12 @@ public class UserPlayer {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private Long playerId;
+    @OneToOne
+    @JoinColumn(name = "player_id")
+    private Player player;
 
-    public UserPlayer(User user, Long playerId) {
+    public UserPlayer(User user, Player player) {
         this.user = user;
-        this.playerId = playerId;
+        this.player = player;
     }
 }

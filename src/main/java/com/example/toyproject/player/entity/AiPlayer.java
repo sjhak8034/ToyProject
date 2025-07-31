@@ -15,15 +15,16 @@ public class AiPlayer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long playerId;
+    @OneToOne
+    @JoinColumn(name = "player_id")
+    private Player player;
 
     @JoinColumn(nullable = false, name = "ai_role_id")
     @ManyToOne()
     private AiRole aiRole;
 
-    AiPlayer(Long playerId, AiRole aiRole) {
-        this.playerId = playerId;
+    AiPlayer(Player player, AiRole aiRole) {
+        this.player = player;
         this.aiRole = aiRole;
     }
 }

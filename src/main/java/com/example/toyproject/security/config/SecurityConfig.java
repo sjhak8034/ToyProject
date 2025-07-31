@@ -51,7 +51,7 @@ public class SecurityConfig {
                         // OPTIONS 요청은 인증 없이 허용
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/", "/auth/**", "/css/**", "/images/**", "/js/**", "/error", "/login",
-                                "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                                "/swagger-ui/**", "/v3/api-docs/**", "/ws/**","/ws/**", "/topic/**", "/app/**", "/ws/info/**", "/ws/*/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exceptionHandling -> exceptionHandling

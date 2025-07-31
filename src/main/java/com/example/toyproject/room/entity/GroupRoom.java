@@ -18,12 +18,16 @@ public class GroupRoom {
     @Column(name = "invite_code", unique = true)
     private String invite_code;
 
+    private String password;
+
     @OneToOne
     @JoinColumn(name = "room_id", nullable = false)
     private Room room;
 
-    public GroupRoom(String invite_code, Room room) {
+
+    public GroupRoom(String invite_code, Room room, String password) {
         this.invite_code = invite_code;
         this.room = room;
+        this.password = password;
     }
 }
