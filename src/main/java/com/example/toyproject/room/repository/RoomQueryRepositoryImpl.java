@@ -9,6 +9,7 @@ import com.example.toyproject.room.entity.QRoom;
 import com.example.toyproject.room.entity.QSingleRoom;
 import com.example.toyproject.user.entity.QUser;
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -54,23 +55,27 @@ public class RoomQueryRepositoryImpl implements RoomQueryRepository {
                         qRoom.owner.id.eq(userId)
                 ));
         //
+
+        BooleanBuilder whereClause = new BooleanBuilder();
         if (mine == false) {
+            whereClause = new BooleanBuilder()
+                    .and(roomName != null? qRoom.name.contains(roomName) : null)
+                    .and(userNickName != null ? qUser.nickname.contains(userNickName) : null)
+                    .and(qRoom.is_private.eq(false));
+
             query.from(qRoom)
                     .leftJoin(qPlayer).on(qPlayer.room.eq(qRoom))
                     .leftJoin(qUserPlayer).on(qUserPlayer.player.eq(qPlayer))
                     .leftJoin(qUser).on(qUserPlayer.user.eq(qUser))
-                    .where(qRoom.name.contains(roomName)
-                            .and(qUser.nickname.contains(userNickName))
-                            .and(qRoom.is_private.eq(false)));
+                    .where(whereClause);
+
             totalCount = queryFactory
                     .select(qRoom.count())
                     .from(qRoom)
                     .leftJoin(qPlayer).on(qPlayer.room.eq(qRoom))
                     .leftJoin(qUserPlayer).on(qUserPlayer.player.eq(qPlayer))
                     .leftJoin(qUser).on(qUserPlayer.user.eq(qUser))
-                    .where(qRoom.name.contains(roomName)
-                            .and(qUser.nickname.contains(userNickName))
-                            .and(qRoom.is_private.eq(false)))
+                    .where(whereClause)
                     .fetchOne();
         } else {
             query.from(qUser)
