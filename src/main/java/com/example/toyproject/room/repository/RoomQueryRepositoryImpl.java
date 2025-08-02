@@ -2,7 +2,7 @@ package com.example.toyproject.room.repository;
 
 import com.example.toyproject.player.entity.QPlayer;
 import com.example.toyproject.player.entity.QUserPlayer;
-import com.example.toyproject.room.dto.QRoomDto_RoomInfoDto;
+import com.example.toyproject.room.dto.QRoomDto_RoomInfo;
 import com.example.toyproject.room.dto.RoomDto;
 import com.example.toyproject.room.entity.QGroupRoom;
 import com.example.toyproject.room.entity.QRoom;
@@ -32,11 +32,11 @@ public class RoomQueryRepositoryImpl implements RoomQueryRepository {
     // mine true일 경우 현재 참여중인 방만 조회
     // mine false일 경우 모든 방 조회
     @Override
-    public Page<RoomDto.RoomInfoDto> findAllRoomInfo(
+    public Page<RoomDto.RoomInfo> findAllRoomInfo(
             Long userId, Integer page, Integer size, String sort, String roomName, String userNickName, Boolean mine) {
         Long totalCount = 0L;
-        JPAQuery<RoomDto.RoomInfoDto> query = queryFactory
-                .select(new QRoomDto_RoomInfoDto(
+        JPAQuery<RoomDto.RoomInfo> query = queryFactory
+                .select(new QRoomDto_RoomInfo(
                         qRoom.id,
                         qRoom.name,
                         qRoom.type,

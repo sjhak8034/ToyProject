@@ -36,7 +36,7 @@ public class RoomDto {
 
     @Getter
     @NoArgsConstructor
-    public static class RoomInfoDto {
+    public static class RoomInfo {
         private Long roomId;
         private String roomName;
         private RoomType roomType;
@@ -50,7 +50,7 @@ public class RoomDto {
         private Boolean isMine;
 
         @QueryProjection
-        public RoomInfoDto(Long roomId, String roomName, RoomType roomType, String ownerNickname, Long ownerId, Integer maxPlayers, Integer currentPlayers, RoomStatus roomStatus, Boolean isPrivate, Boolean isParticipated, Boolean isMine) {
+        public RoomInfo(Long roomId, String roomName, RoomType roomType, String ownerNickname, Long ownerId, Integer maxPlayers, Integer currentPlayers, RoomStatus roomStatus, Boolean isPrivate, Boolean isParticipated, Boolean isMine) {
             this.roomId = roomId;
             this.roomName = roomName;
             this.roomType = roomType;

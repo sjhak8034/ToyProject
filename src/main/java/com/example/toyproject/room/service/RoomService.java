@@ -15,7 +15,7 @@ public class RoomService {
         this.roomRepository = roomRepository;
     }
 
-    public Page<RoomDto.RoomInfoDto> findAllRoomInfo(User user, Integer page, Integer size, String sort, String roomName, String userNickName, Boolean mine) {
+    public Page<RoomDto.RoomInfo> findAllRoomInfo(User user, Integer page, Integer size, String sort, String roomName, String userNickName, Boolean mine) {
         return roomRepository.findAllRoomInfo(user.getId(), page, size, sort, roomName, userNickName, mine);
     }
 

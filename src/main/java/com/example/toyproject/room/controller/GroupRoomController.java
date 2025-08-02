@@ -13,8 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @OpenAPIDefinition(tags = {
         @Tag(name = "GroupRoom", description = "그룹방 관련 API")
 })
@@ -48,7 +46,7 @@ public class GroupRoomController {
             description = "특정 그룹 채팅방의 정보를 조회합니다. 이 API는 그룹 채팅방의 상세 정보를 반환합니다."
     )
     @GetMapping
-    public ResponseEntity<Page<RoomDto.RoomInfoDto>> findAllRoom(
+    public ResponseEntity<Page<RoomDto.RoomInfo>> findAllRoom(
             Authentication authentication,
             @RequestParam (name = "page", defaultValue = "0") Integer page,
             @RequestParam (name = "size", defaultValue = "20") Integer size,

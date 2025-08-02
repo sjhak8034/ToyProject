@@ -19,12 +19,18 @@ public class AiPlayer {
     @JoinColumn(name = "player_id")
     private Player player;
 
+    private String name;
+
+    private String picture;
+
     @JoinColumn(nullable = false, name = "ai_role_id")
     @ManyToOne()
     private AiRole aiRole;
 
-    AiPlayer(Player player, AiRole aiRole) {
+    AiPlayer(Player player, String name, String picture ,AiRole aiRole) {
         this.player = player;
+        this.name = name;
+        this.picture = picture;
         this.aiRole = aiRole;
     }
 }
