@@ -1,5 +1,7 @@
 package com.example.toyproject.room.service;
 
+import com.example.toyproject.player.service.PlayerService;
+import com.example.toyproject.player.service.UserPlayerService;
 import com.example.toyproject.room.dto.RoomDto;
 import com.example.toyproject.room.entity.GroupRoom;
 import com.example.toyproject.room.entity.Room;
@@ -16,16 +18,32 @@ import java.util.Random;
 @Service
 public class GroupRoomService {
 
+    private final UserPlayerService userPlayerService;
     private SingleRoomRepository singleRoomRepository;
     private GroupRoomRepository groupRoomRepository;
     private RoomRepository roomRepository;
 
-    public GroupRoomService(SingleRoomRepository singleRoomRepository, GroupRoomRepository groupRoomRepository, RoomRepository roomRepository) {
+    public GroupRoomService(SingleRoomRepository singleRoomRepository, GroupRoomRepository groupRoomRepository, RoomRepository roomRepository, UserPlayerService userPlayerService) {
         this.singleRoomRepository = singleRoomRepository;
         this.groupRoomRepository = groupRoomRepository;
         this.roomRepository = roomRepository;
+        this.userPlayerService = userPlayerService;
     }
 
+    /**
+     * 그룹룸을 생성하는 메서드
+     * 순서
+     * 1. 최대 인원수가 0 이하인 경우 예외 처리
+     * 2. 그룹룸 생성 요청 DTO를 기반으로 Room 엔티티 생성
+     * 3. Room 엔티티를 저장
+     * 4. 사용자 ID를 기반으로 암호화된 초대 코드 생성
+     * 5. 그룹룸 엔티티 생성
+     * 6. 그룹룸 엔티티를 저장
+     * 7. 사용자 플레이어 정보 저장 (혹시 유저가 방에 바로 들어가지 않는경우 플레이어가 생성안됨)
+     * @param saveGroupRoomRequest 그룹룸 생성 요청 DTO
+     * @param user 요청을 보낸 사용자
+     * @return 생성된 그룹룸 정보 DTO
+     */
     public RoomDto.SaveGroupRoomResponse saveGroupRoom(RoomDto.SaveGroupRoomRequest saveGroupRoomRequest, User user) {
         // 최대 인원수가 0 이하인 경우 예외 처리
         if (saveGroupRoomRequest.maxPlayers() <= 0) {
@@ -36,6 +54,8 @@ public class GroupRoomService {
         String inviteCode = generateEncryptedInviteCode(user);
         GroupRoom groupRoom = new GroupRoom(inviteCode, room, saveGroupRoomRequest.password());
         groupRoomRepository.save(groupRoom);
+        userPlayerService.saveUserPlayer(user, room.getId());
+
         return new RoomDto.SaveGroupRoomResponse(room.getId(), room.getName(), room.getType().name(), groupRoom.getPassword(), groupRoom.getInvite_code());
     }
 

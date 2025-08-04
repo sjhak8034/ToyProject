@@ -3,6 +3,7 @@ package com.example.toyproject.room.controller;
 import com.example.toyproject.room.dto.RoomDto;
 import com.example.toyproject.room.service.GroupRoomService;
 import com.example.toyproject.room.service.RoomService;
+import com.example.toyproject.room.service.SingleRoomService;
 import com.example.toyproject.user.entity.User;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 
@@ -22,6 +23,7 @@ public class GroupRoomController {
 
     private final RoomService roomService;
     private GroupRoomService groupRoomService;
+    private SingleRoomService singleRoomService;
 
     public GroupRoomController(GroupRoomService groupRoomService, RoomService roomService) {
         this.groupRoomService = groupRoomService;
@@ -66,5 +68,18 @@ public class GroupRoomController {
                         mine
                 )
         );
+    }
+
+    @Operation(
+            summary = "싱글(ai) 채팅방 생성"
+            , description = "싱글 플레이어(인공지능) 채팅방을 생성합니다. 이 API는 싱글 플레이어 채팅방을 생성하는 기능을 제공합니다. " +
+                    "성공적으로 생성된 경우, 생성된 방의 정보가 포함된 응답을 반환합니다."
+    )
+    @PostMapping("/single")
+    public ResponseEntity<RoomDto.SaveSingleRoomResponse> createSingleRoom(
+            @RequestBody RoomDto.SaveSingleRoomRequest request,
+            Authentication authentication
+    ) {
+        return ResponseEntity.ok().body(singleRoomService.saveSingleRoom(request, (User) authentication.getPrincipal()));
     }
 }

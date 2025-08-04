@@ -5,6 +5,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Getter
 @Table(name = "single_rooms")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -14,13 +16,13 @@ public class SingleRoom {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Double expectedCost;
+    private BigDecimal expectedCost;
 
     @OneToOne
     @JoinColumn(name = "room_id", nullable = false)
     private Room room;
 
-    public SingleRoom(Double expectedCost, Room room) {
+    public SingleRoom(BigDecimal expectedCost, Room room) {
         this.expectedCost = expectedCost;
         this.room = room;
     }
