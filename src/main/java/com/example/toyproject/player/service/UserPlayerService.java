@@ -48,7 +48,27 @@ public class UserPlayerService {
         Room room = roomService.findRoomById(roomId);
         UserPlayer existingUserPlayer = userPlayerRepository.findByUserAndPlayer_Room(user, room);
         if (existingUserPlayer != null) {
-            log.info("UserPlayer already exists for user: {} in room: {}", user.getId(), roomId);
+            log.info("UserPlayer already exists for user: {} in room: {}", user.getId(), room.getId());
+            return existingUserPlayer.getId();
+        }
+        Player player = playerRepository.save(new Player(PlayerType.USER, room));
+        UserPlayer userPlayer = new UserPlayer(user, player);
+        userPlayerRepository.save(userPlayer);
+        return player.getId();
+    }
+
+    /**
+     * 처음 방을 생성할때 유저를 생성하는 메서드
+     * 이때는 미리 생성된 방(Room) 객체를 사용하여 UserPlayer를 저장합니다.
+     * @param user
+     * @param room
+     * @return
+     */
+    @Transactional
+    public Long saveUserPlayer(User user, Room room) {
+        UserPlayer existingUserPlayer = userPlayerRepository.findByUserAndPlayer_Room(user, room);
+        if (existingUserPlayer != null) {
+            log.info("UserPlayer already exists for user: {} in room: {}", user.getId(), room.getId());
             return existingUserPlayer.getId();
         }
         Player player = playerRepository.save(new Player(PlayerType.USER, room));

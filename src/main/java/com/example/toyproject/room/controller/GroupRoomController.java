@@ -25,9 +25,10 @@ public class GroupRoomController {
     private GroupRoomService groupRoomService;
     private SingleRoomService singleRoomService;
 
-    public GroupRoomController(GroupRoomService groupRoomService, RoomService roomService) {
+    public GroupRoomController(GroupRoomService groupRoomService, RoomService roomService, SingleRoomService singleRoomService) {
         this.groupRoomService = groupRoomService;
         this.roomService = roomService;
+        this.singleRoomService = singleRoomService;
     }
 
     @Operation(

@@ -1,39 +1,28 @@
 spring:
   application:
     name: ToyProject
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${DATABASE_URL}
-    username: ${DATABASE_USERNAME}
-    password: ${DATABASE_PASSWORD}
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:prd}
   jpa:
     hibernate:
-      ddl-auto: none  # ?? create, create-drop, validate, none
+      ddl-auto: none
     show-sql: true
     properties:
       hibernate:
         format_sql: true
-        dialect: org.hibernate.dialect.MySQLDialect  # MySQL 8? ??
+        dialect: org.hibernate.dialect.MySQLDialect
   security:
     oauth2:
       client:
         registration:
           google:
-            client-id: ${OAUTH2.0_GOOGLE_CLIENT_ID}
-            client-secret: ${OAUTH2.0_GOOGLE_CLIENT_SECRET}
             scope:
               - email
-            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
-  config:
-    import: optional:file:.env[.properties]
 
 
-jwt:
-  access-secret: ${ACCESS_JWT_SECRET}  # JWT secret key for access token
-  refresh-secret: ${REFRESH_JWT_SECRET}  # JWT secret key for refresh token
-  token-validity-in-seconds: 3600  # 1 hour
 server:
   port: 3000
+
 logging:
   level:
     org.springframework.web.socket: TRACE
@@ -41,5 +30,9 @@ logging:
     org.springframework.web: DEBUG
     org.springframework.security: DEBUG
     org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE  # For SQL parameter binding detail
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 
+jwt:
+  access-secret: ${ACCESS_JWT_SECRET}
+  refresh-secret: ${REFRESH_JWT_SECRET}
+  token-validity-in-seconds: 3600

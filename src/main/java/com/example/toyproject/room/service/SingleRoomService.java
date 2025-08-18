@@ -1,5 +1,6 @@
 package com.example.toyproject.room.service;
 
+import com.example.toyproject.player.service.AiPlayerService;
 import com.example.toyproject.player.service.PlayerService;
 import com.example.toyproject.player.service.UserPlayerService;
 import com.example.toyproject.room.dto.RoomDto;
@@ -11,6 +12,7 @@ import com.example.toyproject.room.repository.RoomRepository;
 import com.example.toyproject.room.repository.SingleRoomRepository;
 import com.example.toyproject.user.entity.User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 
@@ -20,12 +22,14 @@ public class SingleRoomService {
     private final SingleRoomRepository singleRoomRepository;
     private final PlayerService playerService;
     private final UserPlayerService userPlayerService;
+    private final AiPlayerService aiPlayerService;
 
-    public SingleRoomService(RoomRepository roomRepository, SingleRoomRepository singleRoomRepository, PlayerService playerService, UserPlayerService userPlayerService) {
+    public SingleRoomService(RoomRepository roomRepository, SingleRoomRepository singleRoomRepository, PlayerService playerService, UserPlayerService userPlayerService, AiPlayerService aiPlayerService) {
         this.roomRepository = roomRepository;
         this.singleRoomRepository = singleRoomRepository;
         this.playerService = playerService;
         this.userPlayerService = userPlayerService;
+        this.aiPlayerService = aiPlayerService;
     }
 
     /**
@@ -38,6 +42,7 @@ public class SingleRoomService {
      * @param user
      * @return
      */
+    @Transactional
     public RoomDto.SaveSingleRoomResponse saveSingleRoom(RoomDto.SaveSingleRoomRequest request, User user) {
 
         Room room = new Room(
@@ -56,9 +61,9 @@ public class SingleRoomService {
 
         roomRepository.save(room);
         singleRoomRepository.save(singleRoom);
-        userPlayerService.saveUserPlayer(user, room.getId());
+        userPlayerService.saveUserPlayer(user, room);
+        aiPlayerService.saveAiPlayer(room);
 
-
-        return null;
+        return new RoomDto.SaveSingleRoomResponse(room.getId());
     }
 }

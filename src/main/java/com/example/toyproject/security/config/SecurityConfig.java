@@ -81,6 +81,7 @@ public class SecurityConfig {
 
                             // CORS 헤더 추가
                             response.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
+                            response.setHeader("Access-Control-Allow-Origin", "https://toy-project-fe.vercel.app");
                             response.setHeader("Access-Control-Allow-Credentials", "true");
 
                             response.getWriter().write("{\"message\":\"로그아웃 성공\"}");
@@ -99,8 +100,8 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:5173"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedOrigins(List.of("http://localhost:5173", "https://toy-project-fe.vercel.app")); // 여기에 실제 도메인을 추가하세요
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
 

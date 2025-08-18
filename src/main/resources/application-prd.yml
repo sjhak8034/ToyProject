@@ -1,0 +1,34 @@
+spring:
+  config:
+    import: optional:file:.env[.properties]
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${OAUTH2.0_GOOGLE_CLIENT_ID}
+            client-secret: ${OAUTH2.0_GOOGLE_CLIENT_SECRET}
+            # 프록시 포워드 헤더 기반으로 https 계산
+            redirect-uri: "${BASE_URL:https://toy-project.inf-n8n-jhs.link}/login/oauth2/code/{registrationId}"
+
+server:
+  forward-headers-strategy: framework
+
+cloud:
+  aws:
+    credentials:
+      access-key: ${aws_access_key_id}
+      secret-key: ${aws_secret_access_key}
+    region:
+      static: ${aws_region}
+    s3:
+      bucket: ${aws_s3_bucket_name}
+
+app:
+    frontend:
+        url: "https://toy-project-fe.vercel.app"
